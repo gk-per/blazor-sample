@@ -1,0 +1,47 @@
+@page "/list"
+@inject HttpClient Http
+
+<h3>List</h3>
+@if (interestingThingsList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>URL</th>
+            <th>Blurb</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var listItem in interestingThingsList)
+        {
+            <tr>
+                <td>@listItem.Title</td>
+                <td>@listItem.URL</td>
+                <td>@listItem.Blurb</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+@code {
+    private ListEntry[] interestingThingsList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        interestingThingsList = await Http.GetFromJsonAsync<ListEntry[]>("sample-data/entrysample.json");
+    }
+
+    public class ListEntry
+    {
+        public string Title { get; set; }
+
+        public string URL { get; set; }
+
+        public string Blurb { get; set; }
+    }
+}

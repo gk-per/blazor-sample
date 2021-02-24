@@ -1,0 +1,37 @@
+@page "/submit"
+@using System.Net.Cache
+@using System.Net
+@inject HttpClient Http
+
+<h2>Submit</h2>
+<h4>Title</h4>
+        <RadzenTextBox Placeholder="Example Title" Change=@(args => OnChange(args, "TextBox")) />
+
+<h4>URL</h4>
+        <RadzenTextBox Placeholder="https://example.com" Change=@(args => OnChange(args, "TextBox")) />
+
+<h4>Description</h4>
+        <RadzenTextArea Cols="35" Rows="6" Change=@(args => OnChange(args, "TextArea")) />
+<br>
+<RadzenButton Click=@(args => OnClick("Button with text")) Text="Submit" Style="margin-bottom: 20px; width: 150px" />
+
+@code {
+        private Request requestObject;
+        void OnChange(string value, string name)
+        {
+                //console.Log($"{name} value changed to {value}");
+        }
+
+        async void OnClick(string value)
+        {
+                var request = new HttpRequestMessage(HttpMethod.Get, "https://www.example.com");
+                var responseMessage = await Http.SendAsync(request);
+        }
+
+        public class Request
+        {
+        public string Title { get; set; }
+        public string Url { get; set; }
+        public string Blurb { get; set; }
+        }
+}
